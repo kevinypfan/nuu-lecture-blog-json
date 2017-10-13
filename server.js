@@ -11,7 +11,7 @@ const postRouter = require('./api/post')
 var app = express();
 
 mongoose.Promise = global.Promise;
-mongoose.connect(`mongodb://localhost:27017/${process.env.MONGODB_URL}`, { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
 
 app.use(bodyParser.json());
 
