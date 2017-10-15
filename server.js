@@ -14,6 +14,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
 
 app.use(bodyParser.json());
+app.use(express.static('public'))
 
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
