@@ -27,7 +27,7 @@ app.use('/api/user', userRouter)
 app.use('/api', postRouter)
 
 app.get('/json/products', (req, res) => {
-  res.send(require('./products.json'))
+  res.header('token', 'qwertyuisdfghjk').send(require('./products.json'))
 })
 
 app.listen(process.env.PORT, () => {

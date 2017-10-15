@@ -34,7 +34,7 @@ postRouter.route('/posts')
       res.status(403).send(err)
     })
   })
-  .patch(authenticate, (req, res) => {
+  .put(authenticate, (req, res) => {
     var postId = req.body._id;
     var userId = req.user._id;
     var body = _.pick(req.body, ['title', 'subtopic', 'description'])
