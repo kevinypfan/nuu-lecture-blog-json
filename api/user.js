@@ -12,6 +12,9 @@ userRouter.post('/signup',(req, res) => {
   }).then((token) => {
     res.header('token', token).send('成功註冊');
   }).catch((e) => {
+    if (e.code == '11000') {
+      res.status(400).send('Email已經使用過了');
+    }
     res.status(400).send(e);
   })
 });
