@@ -11,7 +11,7 @@ var authenticate = (req, res, next) => {
       //console.log(req.user.roleId);
       next();
   }).catch(()=>{
-    res.status(401).send();
+    res.status(401).send('沒有此用戶');
   })
 }
 
