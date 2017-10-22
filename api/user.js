@@ -8,9 +8,9 @@ userRouter.post('/signup',(req, res) => {
   var body = _.pick(req.body, ['email', 'password', 'name'])
   var user = new User(body);
   user.save().then(() => {
-    return user.generateAuthToken()
-  }).then((token) => {
-    res.header('token', token).send('成功註冊');
+    return Promise.all([user.generateAuthToken(), user.toJson()])
+  }).then(([token, user]) => {
+    res.header('token', token).send(user);
   }).catch((e) => {
     if (e.code == '11000') {
       res.status(400).send('Email已經使用過了');
