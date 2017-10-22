@@ -19,6 +19,19 @@ userRouter.post('/signup',(req, res) => {
   })
 });
 
+userRouter.get('/uniqueEmail/:email', (req, res) => {
+  var email = req.params.email;
+  User.findOne({ email }).then((response) => {
+    if (!response) {
+      res.send('您可以使用此信箱')
+      return;
+    }
+    return Promise.reject('此信箱已有人使用了')
+  }).catch((err) => {
+    res.status(402).send(err)
+  })
+})
+
 userRouter.post('/signin', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   User.findByCredentials(body.email, body.password).then((user) => {
