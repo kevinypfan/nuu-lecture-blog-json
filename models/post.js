@@ -25,7 +25,7 @@ var PostSchema = new mongoose.Schema({
   },
   time: {
     type: String,
-    default: moment().valueOf()
+    required: true
   }
 })
 
