@@ -35,9 +35,9 @@ userRouter.get('/uniqueEmail/:email', (req, res) => {
 userRouter.post('/signin', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   User.findByCredentials(body.email, body.password).then((user) => {
-    return user.generateAuthToken()
-  }).then((token) => {
-    res.header('token', token).send('登入成功');
+    return Promise.all([user.generateAuthToken(), user.toJson()])
+  }).then(([token, user]) => {
+    res.header('token', token).send(user);
   }).catch((e) => {
     res.status(403).send(e);
   })
