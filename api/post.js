@@ -6,7 +6,7 @@ const { authenticate } = require('../middleware/authenticate')
 
 postRouter.route('/posts')
   .post(authenticate ,(req, res) => {
-    var body = _.pick(req.body, ['title', 'subtopic',  'description'])
+    var body = _.pick(req.body, ['title', 'subtopic',  'description', 'time'])
     body.author = req.user._id
     var post = new Post(body);
     post.save().then((post) => {
