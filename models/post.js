@@ -14,10 +14,11 @@ var PostSchema = new mongoose.Schema({
     trim: true
   },
   author: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
     minlength: 1,
-    trim: true
+    trim: true,
+    ref: 'User'
   },
   description: {
     type: String,

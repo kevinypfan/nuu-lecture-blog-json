@@ -55,21 +55,31 @@ postRouter.route('/posts')
     })
   })
   .get((req, res) => {
-    Post.find().sort({_id: -1}).then((result) => {
+    Post.find().sort({_id: -1})
+      .populate({
+        path: 'author',
+        select: ['name', 'email']
+      })
+      .then((result) => {
       res.send(result)
     })
   })
 
 postRouter.get('/post/:id', authenticate, (req, res) => {
   var postId = req.params.id
-  Post.findOne({_id: postId}).then((post) => {
-    if (!post) {
-      return Promise.reject('找不到此貼文')
-    }
-    res.send(post)
-  }).catch((err) => {
-    res.status(403).send(err)
-  })
+  Post.findOne({_id: postId})
+    .populate({
+      path: 'author',
+      select: ['name', 'email']
+    })
+    .then((post) => {
+      if (!post) {
+        return Promise.reject('找不到此貼文')
+      }
+      res.send(post)
+    }).catch((err) => {
+      res.status(403).send(err)
+    })
 })
 
 
