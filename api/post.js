@@ -42,7 +42,7 @@ postRouter.route('/posts')
     .then((post) => {
       if (!post) {
         return Promise.reject('沒有此貼文')
-      } else if (post.author != userId) {
+      } else if (post.author.toHexString() != userId) {
         return Promise.reject('您不是發文者')
       } else {
         return Post.findOneAndUpdate({'_id': postId}, {$set:{title: body.title, subtopic: body.subtopic, description: body.description}})
