@@ -64,7 +64,7 @@ postRouter.route('/post/:id')
       })
   })
   .delete(authenticate, (req, res) => {
-    var postId = req.body._id;
+    var postId = req.params.id
     var userId = req.user._id;
     Post.findOne({'_id': postId})
     .then((post) => {
