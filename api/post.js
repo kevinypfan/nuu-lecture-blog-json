@@ -37,7 +37,7 @@ postRouter.route('/posts')
   .put(authenticate, (req, res) => {
     var postId = req.body._id;
     var userId = req.user._id;
-    var body = _.pick(req.body, ['title', 'subtopic', 'description', 'time'])
+    var body = _.pick(req.body, ['title', 'subtopic', 'description'])
     Post.findOne({'_id': postId})
     .then((post) => {
       if (!post) {
