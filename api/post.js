@@ -15,25 +15,6 @@ postRouter.route('/posts')
       res.status(403).send(err)
     })
   })
-  .delete(authenticate, (req, res) => {
-    var postId = req.body._id;
-    var userId = req.user._id;
-    Post.findOne({'_id': postId})
-    .then((post) => {
-      if (!post) {
-        return Promise.reject('沒有此貼文')
-      } else if (post.author.toHexString() != userId) {
-        return Promise.reject('您不是發文者')
-      } else {
-        return Post.findOneAndRemove({'_id': postId})
-      }
-    })
-    .then((result) => {
-      res.send('刪除成功')
-    }).catch((err) => {
-      res.status(403).send(err)
-    })
-  })
   .put(authenticate, (req, res) => {
     var postId = req.body._id;
     var userId = req.user._id;
@@ -65,22 +46,42 @@ postRouter.route('/posts')
     })
   })
 
-postRouter.get('/post/:id', authenticate, (req, res) => {
-  var postId = req.params.id
-  Post.findOne({_id: postId})
-    .populate({
-      path: 'author',
-      select: ['name', 'email']
-    })
+postRouter.route('/post/:id')
+  .get(authenticate, (req, res) => {
+    var postId = req.params.id
+    Post.findOne({_id: postId})
+      .populate({
+        path: 'author',
+        select: ['name', 'email']
+      })
+      .then((post) => {
+        if (!post) {
+          return Promise.reject('找不到此貼文')
+        }
+        res.send(post)
+      }).catch((err) => {
+        res.status(403).send(err)
+      })
+  })
+  .delete(authenticate, (req, res) => {
+    var postId = req.body._id;
+    var userId = req.user._id;
+    Post.findOne({'_id': postId})
     .then((post) => {
       if (!post) {
-        return Promise.reject('找不到此貼文')
+        return Promise.reject('沒有此貼文')
+      } else if (post.author.toHexString() != userId) {
+        return Promise.reject('您不是發文者')
+      } else {
+        return Post.findOneAndRemove({'_id': postId})
       }
-      res.send(post)
+    })
+    .then((result) => {
+      res.send('刪除成功')
     }).catch((err) => {
       res.status(403).send(err)
     })
-})
+  })
 
 
 
