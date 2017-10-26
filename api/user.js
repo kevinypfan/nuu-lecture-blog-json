@@ -21,15 +21,20 @@ userRouter.post('/signup',(req, res) => {
 
 userRouter.get('/uniqueEmail/:email', (req, res) => {
   var email = req.params.email;
-  User.findOne({ email }).then((response) => {
-    if (!response) {
-      res.status(200).send()
-      return;
-    }
-    return Promise.reject('此信箱已有人使用了')
-  }).catch((err) => {
-    res.status(402).send(err)
-  })
+  var regex = new RegExp("^[a-zA-Z0-9!#$&_*?^{}~-]+(\.[a-zA-Z0-9!#$&_*?^{}~-]+)*@([a-z0-9]+([a-z0-9-]*)\.)+[a-zA-Z]+$", "g");
+  if (!regex.test(email)) {
+    res.status(402).send("此信箱不合規範")
+  } else {
+    User.findOne({ email }).then((response) => {
+      if (!response) {
+        res.status(200).send()
+        return;
+      }
+      return Promise.reject('此信箱已有人使用了')
+    }).catch((err) => {
+      res.status(402).send(err)
+    })
+  }
 })
 
 userRouter.post('/signin', (req, res) => {
